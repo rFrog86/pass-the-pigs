@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pass the Pigs</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #336633;
+    }
+    .button {
+      padding: 10px;
+      margin: 5px;
+      min-width: 220px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      display: block;
+    }
+    .button:hover {
+      background-color: #ddd;
+    }
+    .special {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pass the Pigs</h1>
+  <div id="setup">
+    <label>How many players? <input type="number" id="numPlayers" min="2" max="10"></label>
+    <button onclick="setupGame()">Start</button>
+    <div id="playerInputs"></div>
+  </div>
+
+  <div id="game" style="display:none;">
+    <h2 id="turnDisplay"></h2>
+    <p id="roundScore">Round Score: 0</p>
+    <div id="buttons"></div>
+    <button class="button special" onclick="pigOut()">Pig Out</button>
+    <button class="button special" onclick="makinBacon()">Makin' Bacon</button>
+    <button class="button special" onclick="bankPoints()">Bank Points</button>
+    <hr>
+    <h3>Scores</h3>
+    <ul id="scoreBoard"></ul>
+  </div>
+
+  <script>
+    let players = [];
+    let scores = {};
+    let currentIndex = 0;
+    let roundScore = 0;
+
+    const outcomes = [
+      { name: "Sider (1 pt)", points: 1 },
+      { name: "Trotter (5 pts)", points: 5 },
+      { name: "Razorback (5 pts)", points: 5 },
+      { name: "Snouter (10 pts)", points: 10 },
+      { name: "Leaning Jowler (15 pts)", points: 15 },
+      { name: "Double Sider (2 pts)", points: 2 },
+      { name: "Double Trotter (20 pts)", points: 20 },
+      { name: "Double Razorback (20 pts)", points: 20 },
+      { name: "Double Snouter (40 pts)", points: 40 },
+      { name: "Double Leaning Jowler (60 pts)", points: 60 },
+    ];
+
+    function setupGame() {
+      const num = parseInt(document.getElementById('numPlayers').value);
+      if (!num || num < 2) return alert("Enter 2 or more players.");
+
+      const container = document.getElementById("playerInputs");
+      container.innerHTML = "";
+      players = [];
+      for (let i = 0; i < num; i++) {
+        const input = document.createElement("input");
+        input.placeholder = `Player ${i + 1} name`;
+        input.id = `player${i}`;
+        container.appendChild(input);
+        container.appendChild(document.createElement("br"));
+      }
+
+      const button = document.createElement("button");
+      button.innerText = "Begin Game";
+      button.onclick = beginGame;
+      container.appendChild(button);
+    }
+
+    function beginGame() {
+      players = [];
+      scores = {};
+      for (let i = 0; i < 10; i++) {
+        const input = document.getElementById(`player${i}`);
+        if (input && input.value.trim()) {
+          players.push(input.value.trim());
+          scores[input.value.trim()] = 0;
+        }
+      }
+      if (players.length < 2) return alert("Enter at least two player names.");
+
+      document.getElementById("setup").style.display = "none";
+      document.getElementById("game").style.display = "block";
+      currentIndex = 0;
+      roundScore = 0;
+      renderGame();
+    }
+
+    function renderGame() {
+      const current = players[currentIndex];
+      document.getElementById("turnDisplay").innerText = `${current}'s Turn`;
+      document.getElementById("roundScore").innerText = `Round Score: ${roundScore}`;
+
+      const buttons = document.getElementById("buttons");
+      buttons.innerHTML = "";
+      outcomes.forEach(outcome => {
+        const btn = document.createElement("button");
+        btn.className = "button";
+        btn.innerText = outcome.name;
+        btn.onclick = () => {
+          roundScore += outcome.points;
+          renderGame();
+        };
+        buttons.appendChild(btn);
+      });
+
+      const board = document.getElementById("scoreBoard");
+      board.innerHTML = "";
+      players.forEach(p => {
+        const li = document.createElement("li");
+        li.innerText = `${p}: ${scores[p]} pts`;
+        board.appendChild(li);
+      });
+    }
+
+    function pigOut() {
+      alert("Pig Out! Round score lost.");
+      nextPlayer();
+    }
+
+    function makinBacon() {
+      const current = players[currentIndex];
+      scores[current] = 0;
+      alert(`${current}'s score reset to 0!`);
+      nextPlayer();
+    }
+
+    function bankPoints() {
+      const current = players[currentIndex];
+      scores[current] += roundScore;
+      if (scores[current] >= 100) {
+        alert(`${current} wins with ${scores[current]} points!`);
+        location.reload();
+        return;
+      }
+      alert(`${roundScore} points banked.`);
+      nextPlayer();
+    }
+
+    function nextPlayer() {
+      roundScore = 0;
+      currentIndex = (currentIndex + 1) % players.length;
+      renderGame();
+    }
+  </script>
+</body>
+</html>
