@@ -24,12 +24,14 @@
       border-bottom: 2px solid #e74c3c;
       padding-bottom: 5px;
     }
-    #setup, #game {
+    #setup, #game, #winScreen {
       background-color: white;
       padding: 25px;
       border-radius: 15px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
     }
     .button {
       padding: 12px 20px;
@@ -110,6 +112,45 @@
     .special-buttons {
       margin-top: 20px;
     }
+    #winScreen {
+      display: none;
+      text-align: center;
+    }
+    #winScreen h2 {
+      color: #e74c3c;
+      font-size: 2em;
+      border: none;
+    }
+    #finalRankings {
+      list-style-type: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    #finalRankings li {
+      padding: 10px;
+      margin: 5px 0;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+    }
+    #finalRankings li:first-child {
+      background-color: #ffd700;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    #finalRankings li:nth-child(2) {
+      background-color: #c0c0c0;
+    }
+    #finalRankings li:nth-child(3) {
+      background-color: #cd7f32;
+    }
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background-color: #f00;
+      top: -10px;
+      z-index: 0;
+    }
   </style>
 </head>
 <body>
@@ -128,12 +169,19 @@
     <div class="special-buttons">
       <button class="button special" onclick="pigOut()">Pig Out</button>
       <button class="button special" onclick="makinBacon()">Makin' Bacon</button>
-      <button class="button special" onclick="eliminatePlayer()">Piggyback</button>
+      <button class="button special" onclick="eliminatePlayer()">Piggyback (ELIMINATE)</button>
       <button class="button special" onclick="bankPoints()">Bank Points</button>
     </div>
     <hr>
     <h3>Scores</h3>
     <ul id="scoreBoard"></ul>
+  </div>
+
+  <div id="winScreen">
+    <h2 id="winnerText"></h2>
+    <h3>Final Rankings</h3>
+    <ul id="finalRankings"></ul>
+    <button class="button" onclick="resetGame()">Play Again</button>
   </div>
 
   <script>
@@ -193,6 +241,7 @@
 
       document.getElementById("setup").style.display = "none";
       document.getElementById("game").style.display = "block";
+      document.getElementById("winScreen").style.display = "none";
       currentIndex = 0;
       roundScore = 0;
       renderGame();
@@ -236,8 +285,7 @@
       // Check if game is over
       if (players.length - eliminatedPlayers.length === 1) {
         const winner = players.find(p => !eliminatedPlayers.includes(p));
-        alert(`${winner} wins as the last remaining player!`);
-        location.reload();
+        showWinScreen(winner, true);
         return;
       }
       
@@ -260,8 +308,7 @@
       const current = players[currentIndex];
       scores[current] += roundScore;
       if (scores[current] >= 100) {
-        alert(`${current} wins with ${scores[current]} points!`);
-        location.reload();
+        showWinScreen(current, false);
         return;
       }
       alert(`${roundScore} points banked.`);
@@ -274,6 +321,80 @@
         currentIndex = (currentIndex + 1) % players.length;
       } while (eliminatedPlayers.includes(players[currentIndex]));
       renderGame();
+    }
+
+    function showWinScreen(winner, isEliminationWin) {
+      document.getElementById("game").style.display = "none";
+      const winScreen = document.getElementById("winScreen");
+      const winnerText = document.getElementById("winnerText");
+      
+      if (isEliminationWin) {
+        winnerText.innerText = `${winner} wins as the last remaining player!`;
+      } else {
+        winnerText.innerText = `${winner} wins with ${scores[winner]} points!`;
+      }
+      
+      // Create final rankings
+      const rankings = document.getElementById("finalRankings");
+      rankings.innerHTML = "";
+      
+      // Sort players by score (highest first)
+      const sortedPlayers = [...players].sort((a, b) => scores[b] - scores[a]);
+      
+      sortedPlayers.forEach((player, index) => {
+        const li = document.createElement("li");
+        li.innerText = `${index + 1}. ${player}: ${scores[player]} pts`;
+        if (eliminatedPlayers.includes(player)) {
+          li.innerText += " (eliminated)";
+        }
+        rankings.appendChild(li);
+      });
+      
+      winScreen.style.display = "block";
+      startConfetti();
+    }
+
+    function resetGame() {
+      stopConfetti();
+      document.getElementById("winScreen").style.display = "none";
+      document.getElementById("setup").style.display = "block";
+    }
+
+    // Confetti animation functions
+    let confettiInterval;
+    function startConfetti() {
+      const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
+      confettiInterval = setInterval(() => {
+        const confetti = document.createElement("div");
+        confetti.className = "confetti";
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+        document.body.appendChild(confetti);
+        
+        // Animation
+        let pos = -10;
+        let speed = 2 + Math.random() * 3;
+        let spin = Math.random() * 10 - 5;
+        let angle = 0;
+        
+        const fall = setInterval(() => {
+          pos += speed;
+          angle += spin;
+          confetti.style.top = pos + "px";
+          confetti.style.transform = `rotate(${angle}deg)`;
+          
+          if (pos > window.innerHeight) {
+            clearInterval(fall);
+            confetti.remove();
+          }
+        }, 20);
+      }, 100);
+    }
+
+    function stopConfetti() {
+      clearInterval(confettiInterval);
+      document.querySelectorAll('.confetti').forEach(el => el.remove());
     }
   </script>
 </body>
