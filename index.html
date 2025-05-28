@@ -5,38 +5,116 @@
   <title>Pass the Pigs</title>
   <style>
     body {
-      font-family: Times New Roman, serif;
+      font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
       padding: 20px;
+      background-color: #f8f4e8;
+      max-width: 800px;
+      margin: 0 auto;
+      color: #333;
     }
-    h1, h2 {
-      color: #094211;
+    h1 {
+      color: #e74c3c;
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    h2, h3 {
+      color: #2c3e50;
+      border-bottom: 2px solid #e74c3c;
+      padding-bottom: 5px;
+    }
+    #setup, #game {
+      background-color: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
     }
     .button {
-      padding: 10px;
-      margin: 5px;
+      padding: 12px 20px;
+      margin: 8px 0;
       min-width: 220px;
-      background-color: #f0f0f0;
-      border: 1px solid #ccc;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
       display: block;
+      font-size: 1em;
+      transition: all 0.3s;
+      text-align: center;
     }
     .button:hover {
-      background-color: #ddd;
+      background-color: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     .special {
+      background-color: #e74c3c;
       font-weight: bold;
+    }
+    .special:hover {
+      background-color: #c0392b;
     }
     .eliminated {
       text-decoration: line-through;
-      color: #999;
+      color: #95a5a6;
+    }
+    input[type="number"], input[type="text"] {
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 1em;
+      margin: 5px 0;
+    }
+    #playerInputs input {
+      width: 200px;
+    }
+    #roundScore {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #27ae60;
+      background-color: #eafaf1;
+      padding: 10px;
+      border-radius: 5px;
+      display: inline-block;
+    }
+    #scoreBoard {
+      list-style-type: none;
+      padding: 0;
+    }
+    #scoreBoard li {
+      padding: 8px 15px;
+      margin: 5px 0;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      transition: all 0.3s;
+    }
+    #scoreBoard li:hover {
+      background-color: #f0f0f0;
+      transform: translateX(5px);
+    }
+    hr {
+      border: 0;
+      height: 1px;
+      background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+      margin: 20px 0;
+    }
+    #buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
   <h1>Pass the Pigs</h1>
   <div id="setup">
+    <h2>Game Setup</h2>
     <label>How many players? <input type="number" id="numPlayers" min="2" max="10"></label>
-    <button onclick="setupGame()">Start</button>
+    <button class="button" onclick="setupGame()">Start</button>
     <div id="playerInputs"></div>
   </div>
 
@@ -81,6 +159,7 @@
       players = [];
       for (let i = 0; i < num; i++) {
         const input = document.createElement("input");
+        input.type = "text";
         input.placeholder = `Player ${i + 1} name`;
         input.id = `player${i}`;
         container.appendChild(input);
@@ -88,6 +167,7 @@
       }
 
       const button = document.createElement("button");
+      button.className = "button";
       button.innerText = "Begin Game";
       button.onclick = beginGame;
       container.appendChild(button);
