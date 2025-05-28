@@ -7,26 +7,49 @@
     body {
       font-family: 'Comic Sans MS', cursive, sans-serif;
       padding: 20px;
-      background-color: #f0e6cc;
+      background-color: #5c3a21;
+      background-image: 
+        linear-gradient(rgba(92, 58, 33, 0.8), rgba(92, 58, 33, 0.8)),
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><path d="M0,200 Q100,150 200,200 T400,200" stroke="%23321e0f" fill="none" stroke-width="2" opacity="0.3"/><path d="M0,100 Q150,50 200,100 T400,100" stroke="%23321e0f" fill="none" stroke-width="2" opacity="0.2"/><path d="M0,300 Q150,250 200,300 T400,300" stroke="%23321e0f" fill="none" stroke-width="2" opacity="0.2"/><path d="M100,0 Q150,100 100,200 T100,400" stroke="%23321e0f" fill="none" stroke-width="2" opacity="0.2"/><path d="M300,0 Q250,100 300,200 T300,400" stroke="%23321e0f" fill="none" stroke-width="2" opacity="0.2"/></svg>');
+      background-size: cover;
       max-width: 800px;
       margin: 0 auto;
       color: #5c3a21;
       text-align: center;
     }
     h1 {
-      color: #8b4513;
+      color: #fff;
       font-size: 3em;
       margin: 10px 0;
-      text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
       letter-spacing: 2px;
+      background-color: rgba(139, 69, 19, 0.7);
+      padding: 10px;
+      border-radius: 10px;
+      display: inline-block;
     }
     #game-container {
-      background-color: #fff9e6;
-      border: 8px solid #d2b48c;
+      background-color: rgba(255, 249, 230, 0.9);
+      border: 12px solid transparent;
+      border-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23d2b48c" stroke="%238b4513" stroke-width="5"/></svg>') 12;
       border-radius: 15px;
       padding: 20px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3), inset 0 0 20px rgba(139, 69, 19, 0.3);
+      position: relative;
+      overflow: hidden;
     }
+    #game-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M10,10 Q30,5 50,10 T90,10" stroke="%238b4513" fill="none" stroke-width="0.5" opacity="0.1"/><path d="M10,30 Q25,20 50,30 T90,30" stroke="%238b4513" fill="none" stroke-width="0.5" opacity="0.1"/><path d="M10,50 Q20,40 50,50 T90,50" stroke="%238b4513" fill="none" stroke-width="0.5" opacity="0.1"/></svg>');
+      background-size: 200px 200px;
+      pointer-events: none;
+    }
+    /* Rest of your existing styles remain the same */
     .pig-section {
       display: flex;
       justify-content: space-around;
@@ -50,10 +73,12 @@
       color: #5c3a21;
       cursor: pointer;
       transition: all 0.2s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     .pig-button:hover {
       background-color: #ffc266;
       transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
     }
     .special-button {
       background-color: #ff9966;
@@ -67,6 +92,10 @@
       font-size: 1.5em;
       color: #8b4513;
       margin: 15px 0;
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 8px;
+      border-radius: 8px;
+      display: inline-block;
     }
     #round-score {
       font-size: 1.3em;
@@ -76,13 +105,15 @@
       display: inline-block;
       margin: 10px 0;
       border: 2px solid #66b3ff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     #score-board {
-      background-color: #f5f5f5;
+      background-color: rgba(245, 245, 245, 0.8);
       border-radius: 10px;
       padding: 15px;
       margin-top: 20px;
       border: 3px solid #d2b48c;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     #score-board h3 {
       color: #8b4513;
@@ -91,18 +122,23 @@
     .player-score {
       padding: 8px;
       margin: 5px 0;
-      background-color: #fff;
+      background-color: rgba(255, 255, 255, 0.9);
       border-radius: 5px;
       border-left: 4px solid #8b4513;
     }
     .setup-section {
       margin: 20px 0;
+      background-color: rgba(255, 249, 230, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      border: 3px solid #d2b48c;
     }
     input {
       padding: 8px;
       border: 2px solid #8b4513;
       border-radius: 5px;
       margin: 5px;
+      background-color: rgba(255, 255, 255, 0.9);
     }
     .start-button {
       background-color: #8b4513;
@@ -113,6 +149,13 @@
       border-radius: 8px;
       cursor: pointer;
       margin-top: 15px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .start-button:hover {
+      background-color: #a0522d;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
     }
     .win-screen {
       display: none;
@@ -121,7 +164,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(210, 180, 140, 0.9);
+      background-color: rgba(92, 58, 33, 0.95);
       z-index: 100;
       display: flex;
       justify-content: center;
@@ -132,15 +175,18 @@
       background-color: #fff9e6;
       padding: 30px;
       border-radius: 15px;
-      border: 8px solid #8b4513;
+      border: 12px solid transparent;
+      border-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23d2b48c" stroke="%238b4513" stroke-width="5"/></svg>') 12;
       max-width: 80%;
+      box-shadow: 0 0 30px rgba(210, 180, 140, 0.5);
     }
     .confetti {
       position: absolute;
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       background-color: #f00;
       animation: fall 5s linear forwards;
+      z-index: 10;
     }
     @keyframes fall {
       to {
@@ -150,6 +196,7 @@
   </style>
 </head>
 <body>
+  <!-- The rest of your HTML remains exactly the same -->
   <div id="game-container">
     <h1>PASS THE PIGS</h1>
     
@@ -205,6 +252,7 @@
     </div>
   </div>
 
+  <!-- Your JavaScript remains exactly the same -->
   <script>
     let players = [];
     let scores = {};
@@ -311,10 +359,52 @@
       });
     }
 
+    let confettiInterval;
+    let activeConfetti = [];
+
+    function resetGame() {
+      document.getElementById("win-screen").style.display = "none";
+      document.getElementById("setup").style.display = "block";
+      stopConfetti();
+    }
+
+    function startConfetti() {
+      const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+      
+      // Clear any existing confetti first
+      stopConfetti();
+      
+      // Create new confetti continuously
+      confettiInterval = setInterval(() => {
+        for (let i = 0; i < 10; i++) { // Create 10 pieces at a time
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+          confetti.style.left = Math.random() * 100 + 'vw';
+          confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.width = Math.random() * 10 + 5 + 'px';
+          confetti.style.height = Math.random() * 10 + 5 + 'px';
+          confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+          document.body.appendChild(confetti);
+          activeConfetti.push(confetti);
+          
+          // Remove confetti after animation completes
+          setTimeout(() => {
+            confetti.remove();
+            activeConfetti = activeConfetti.filter(c => c !== confetti);
+          }, 5000);
+        }
+      }, 300); // New batch every 300ms
+    }
+
+    function stopConfetti() {
+      clearInterval(confettiInterval);
+      activeConfetti.forEach(confetti => confetti.remove());
+      activeConfetti = [];
+    }
+
     function showWinScreen(winner) {
       document.getElementById("game").style.display = "none";
       document.getElementById("win-screen").style.display = "flex";
-      
       document.getElementById("winner-message").textContent = `${winner} wins with ${scores[winner]} points!`;
       
       const finalScores = document.getElementById("final-scores");
@@ -330,37 +420,7 @@
         finalScores.appendChild(scoreElement);
       });
       
-      createConfetti();
-    }
-
-    function resetGame() {
-      document.getElementById("win-screen").style.display = "none";
-      document.getElementById("setup").style.display = "block";
-      clearConfetti();
-    }
-
-    function createConfetti() {
-      const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
-      
-      for (let i = 0; i < 100; i++) {
-        const confetti = document.createElement("div");
-        confetti.className = "confetti";
-        confetti.style.left = Math.random() * 100 + 'vw';
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.width = Math.random() * 10 + 5 + 'px';
-        confetti.style.height = Math.random() * 10 + 5 + 'px';
-        confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
-        document.body.appendChild(confetti);
-        
-        // Remove confetti after animation
-        setTimeout(() => {
-          confetti.remove();
-        }, 5000);
-      }
-    }
-
-    function clearConfetti() {
-      document.querySelectorAll('.confetti').forEach(el => el.remove());
+      startConfetti(); // Start continuous confetti
     }
   </script>
 </body>
