@@ -7,7 +7,6 @@
     body {
       font-family: Times New Roman, serif;
       padding: 20px;
-      background-colour: #19c243;
     }
     h1, h2 {
       color: #f2c674;
@@ -26,6 +25,10 @@
     }
     .special {
       font-weight: bold;
+    }
+    .eliminated {
+      text-decoration: line-through;
+      color: #999;
     }
   </style>
 </head>
@@ -54,6 +57,7 @@
     let scores = {};
     let currentIndex = 0;
     let roundScore = 0;
+    let eliminatedPlayers = [];
 
     const outcomes = [
       { name: "Sider (1 pt)", points: 1 },
@@ -61,11 +65,11 @@
       { name: "Razorback (5 pts)", points: 5 },
       { name: "Snouter (10 pts)", points: 10 },
       { name: "Leaning Jowler (15 pts)", points: 15 },
-      { name: "Double Sider (2 pts)", points: 2 },
       { name: "Double Trotter (20 pts)", points: 20 },
       { name: "Double Razorback (20 pts)", points: 20 },
       { name: "Double Snouter (40 pts)", points: 40 },
       { name: "Double Leaning Jowler (60 pts)", points: 60 },
+      { name: "Piggyback (ELIMINATED)", points: 0, eliminate: true }
     ];
 
     function setupGame() {
@@ -92,6 +96,7 @@
     function beginGame() {
       players = [];
       scores = {};
+      eliminatedPlayers = [];
       for (let i = 0; i < 10; i++) {
         const input = document.getElementById(`player${i}`);
         if (input && input.value.trim()) {
@@ -120,8 +125,12 @@
         btn.className = "button";
         btn.innerText = outcome.name;
         btn.onclick = () => {
-          roundScore += outcome.points;
-          renderGame();
+          if (outcome.eliminate) {
+            eliminatePlayer();
+          } else {
+            roundScore += outcome.points;
+            renderGame();
+          }
         };
         buttons.appendChild(btn);
       });
@@ -131,8 +140,27 @@
       players.forEach(p => {
         const li = document.createElement("li");
         li.innerText = `${p}: ${scores[p]} pts`;
+        if (eliminatedPlayers.includes(p)) {
+          li.className = "eliminated";
+        }
         board.appendChild(li);
       });
+    }
+
+    function eliminatePlayer() {
+      const current = players[currentIndex];
+      eliminatedPlayers.push(current);
+      alert(`${current} has been eliminated by Piggyback!`);
+      
+      // Check if game is over
+      if (players.length - eliminatedPlayers.length === 1) {
+        const winner = players.find(p => !eliminatedPlayers.includes(p));
+        alert(`${winner} wins as the last remaining player!`);
+        location.reload();
+        return;
+      }
+      
+      nextPlayer();
     }
 
     function pigOut() {
@@ -161,7 +189,9 @@
 
     function nextPlayer() {
       roundScore = 0;
-      currentIndex = (currentIndex + 1) % players.length;
+      do {
+        currentIndex = (currentIndex + 1) % players.length;
+      } while (eliminatedPlayers.includes(players[currentIndex]));
       renderGame();
     }
   </script>
