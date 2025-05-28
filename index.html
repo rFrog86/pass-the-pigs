@@ -5,231 +5,242 @@
   <title>Pass the Pigs</title>
   <style>
     body {
-      font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
       padding: 20px;
-      background-color: #f8f4e8;
+      background-color: #f0e6cc;
       max-width: 800px;
       margin: 0 auto;
-      color: #333;
+      color: #5c3a21;
+      text-align: center;
     }
     h1 {
-      color: #e74c3c;
-      text-align: center;
-      font-size: 2.5em;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      color: #8b4513;
+      font-size: 3em;
+      margin: 10px 0;
+      text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3);
+      letter-spacing: 2px;
     }
-    h2, h3 {
-      color: #2c3e50;
-      border-bottom: 2px solid #e74c3c;
-      padding-bottom: 5px;
-    }
-    #setup, #game, #winScreen {
-      background-color: white;
-      padding: 25px;
+    #game-container {
+      background-color: #fff9e6;
+      border: 8px solid #d2b48c;
       border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-      position: relative;
-      z-index: 1;
+      padding: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
-    .button {
-      padding: 12px 20px;
+    .pig-section {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    .pig-column {
+      flex: 1;
+      min-width: 200px;
+      margin: 10px;
+    }
+    .pig-button {
+      background-color: #ffd699;
+      border: 3px solid #8b4513;
+      border-radius: 10px;
+      padding: 12px;
       margin: 8px 0;
-      min-width: 220px;
-      background-color: #3498db;
+      width: 100%;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #5c3a21;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pig-button:hover {
+      background-color: #ffc266;
+      transform: translateY(-3px);
+    }
+    .special-button {
+      background-color: #ff9966;
+      border-color: #cc3300;
       color: white;
+    }
+    .special-button:hover {
+      background-color: #ff7733;
+    }
+    #current-player {
+      font-size: 1.5em;
+      color: #8b4513;
+      margin: 15px 0;
+    }
+    #round-score {
+      font-size: 1.3em;
+      background-color: #e6f7ff;
+      padding: 10px;
+      border-radius: 8px;
+      display: inline-block;
+      margin: 10px 0;
+      border: 2px solid #66b3ff;
+    }
+    #score-board {
+      background-color: #f5f5f5;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 20px;
+      border: 3px solid #d2b48c;
+    }
+    #score-board h3 {
+      color: #8b4513;
+      margin-top: 0;
+    }
+    .player-score {
+      padding: 8px;
+      margin: 5px 0;
+      background-color: #fff;
+      border-radius: 5px;
+      border-left: 4px solid #8b4513;
+    }
+    .setup-section {
+      margin: 20px 0;
+    }
+    input {
+      padding: 8px;
+      border: 2px solid #8b4513;
+      border-radius: 5px;
+      margin: 5px;
+    }
+    .start-button {
+      background-color: #8b4513;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1.2em;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      display: block;
-      font-size: 1em;
-      transition: all 0.3s;
-      text-align: center;
+      margin-top: 15px;
     }
-    .button:hover {
-      background-color: #2980b9;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    .special {
-      background-color: #e74c3c;
-      font-weight: bold;
-    }
-    .special:hover {
-      background-color: #c0392b;
-    }
-    .eliminated {
-      text-decoration: line-through;
-      color: #95a5a6;
-    }
-    input[type="number"], input[type="text"] {
-      padding: 10px;
-      border: 2px solid #ddd;
-      border-radius: 5px;
-      font-size: 1em;
-      margin: 5px 0;
-    }
-    #playerInputs input {
-      width: 200px;
-    }
-    #roundScore {
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #27ae60;
-      background-color: #eafaf1;
-      padding: 10px;
-      border-radius: 5px;
-      display: inline-block;
-    }
-    #scoreBoard {
-      list-style-type: none;
-      padding: 0;
-    }
-    #scoreBoard li {
-      padding: 8px 15px;
-      margin: 5px 0;
-      background-color: #f9f9f9;
-      border-radius: 5px;
-      transition: all 0.3s;
-    }
-    #scoreBoard li:hover {
-      background-color: #f0f0f0;
-      transform: translateX(5px);
-    }
-    hr {
-      border: 0;
-      height: 1px;
-      background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
-      margin: 20px 0;
-    }
-    #buttons {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .special-buttons {
-      margin-top: 20px;
-    }
-    #winScreen {
+    .win-screen {
       display: none;
-      text-align: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(210, 180, 140, 0.9);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
-    #winScreen h2 {
-      color: #e74c3c;
-      font-size: 2em;
-      border: none;
-    }
-    #finalRankings {
-      list-style-type: none;
-      padding: 0;
-      margin: 20px 0;
-    }
-    #finalRankings li {
-      padding: 10px;
-      margin: 5px 0;
-      background-color: #f9f9f9;
-      border-radius: 5px;
-    }
-    #finalRankings li:first-child {
-      background-color: #ffd700;
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-    #finalRankings li:nth-child(2) {
-      background-color: #c0c0c0;
-    }
-    #finalRankings li:nth-child(3) {
-      background-color: #cd7f32;
+    .win-content {
+      background-color: #fff9e6;
+      padding: 30px;
+      border-radius: 15px;
+      border: 8px solid #8b4513;
+      max-width: 80%;
     }
     .confetti {
-      position: fixed;
+      position: absolute;
       width: 10px;
       height: 10px;
       background-color: #f00;
-      top: -10px;
-      z-index: 0;
+      animation: fall 5s linear forwards;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Pass the Pigs</h1>
-  <div id="setup">
-    <h2>Game Setup</h2>
-    <label>How many players? <input type="number" id="numPlayers" min="2" max="10"></label>
-    <button class="button" onclick="setupGame()">Start</button>
-    <div id="playerInputs"></div>
-  </div>
-
-  <div id="game" style="display:none;">
-    <h2 id="turnDisplay"></h2>
-    <p id="roundScore">Round Score: 0</p>
-    <div id="buttons"></div>
-    <div class="special-buttons">
-      <button class="button special" onclick="pigOut()">Pig Out</button>
-      <button class="button special" onclick="makinBacon()">Makin' Bacon</button>
-      <button class="button special" onclick="eliminatePlayer()">Piggyback (ELIMINATE)</button>
-      <button class="button special" onclick="bankPoints()">Bank Points</button>
+  <div id="game-container">
+    <h1>PASS THE PIGS</h1>
+    
+    <div id="setup" class="setup-section">
+      <h2>Game Setup</h2>
+      <div>
+        <label>How many players? <input type="number" id="numPlayers" min="2" max="10"></label>
+      </div>
+      <div id="playerInputs"></div>
+      <button class="start-button" onclick="setupGame()">Start Game</button>
     </div>
-    <hr>
-    <h3>Scores</h3>
-    <ul id="scoreBoard"></ul>
+
+    <div id="game" style="display:none;">
+      <div id="current-player"></div>
+      <div id="round-score">Round Score: 0</div>
+      
+      <div class="pig-section">
+        <div class="pig-column">
+          <button class="pig-button" onclick="addPoints(5)">Razorback (5 pts)</button>
+          <button class="pig-button" onclick="addPoints(20)">Double Razorback (20 pts)</button>
+          <button class="pig-button" onclick="addPoints(5)">Trotter (5 pts)</button>
+        </div>
+        <div class="pig-column">
+          <button class="pig-button" onclick="addPoints(15)">Leaning Jowler (15 pts)</button>
+          <button class="pig-button" onclick="addPoints(60)">Double Leaning Jowler (60 pts)</button>
+          <button class="pig-button" onclick="addPoints(1)">Sider (1 pt)</button>
+        </div>
+        <div class="pig-column">
+          <button class="pig-button" onclick="addPoints(20)">Double Trotter (20 pts)</button>
+          <button class="pig-button" onclick="addPoints(10)">Snouter (10 pts)</button>
+          <button class="pig-button" onclick="addPoints(40)">Double Snouter (40 pts)</button>
+        </div>
+        <div class="pig-column">
+          <button class="pig-button special-button" onclick="pigOut()">Pig Out</button>
+          <button class="pig-button special-button" onclick="makinBacon()">Makin' Bacon</button>
+          <button class="pig-button special-button" onclick="bankPoints()">Bank Points</button>
+        </div>
+      </div>
+      
+      <div id="score-board">
+        <h3>Scores</h3>
+        <div id="score-display"></div>
+      </div>
+    </div>
   </div>
 
-  <div id="winScreen">
-    <h2 id="winnerText"></h2>
-    <h3>Final Rankings</h3>
-    <ul id="finalRankings"></ul>
-    <button class="button" onclick="resetGame()">Play Again</button>
+  <div id="win-screen" class="win-screen" style="display:none;">
+    <div class="win-content">
+      <h2 id="winner-message"></h2>
+      <h3>Final Rankings</h3>
+      <div id="final-scores"></div>
+      <button class="start-button" onclick="resetGame()">Play Again</button>
+    </div>
   </div>
 
   <script>
     let players = [];
     let scores = {};
-    let currentIndex = 0;
+    let currentPlayerIndex = 0;
     let roundScore = 0;
-    let eliminatedPlayers = [];
-
-    const outcomes = [
-      { name: "Sider (1 pt)", points: 1 },
-      { name: "Trotter (5 pts)", points: 5 },
-      { name: "Razorback (5 pts)", points: 5 },
-      { name: "Snouter (10 pts)", points: 10 },
-      { name: "Leaning Jowler (15 pts)", points: 15 },
-      { name: "Double Trotter (20 pts)", points: 20 },
-      { name: "Double Razorback (20 pts)", points: 20 },
-      { name: "Double Snouter (40 pts)", points: 40 },
-      { name: "Double Leaning Jowler (60 pts)", points: 60 }
-    ];
 
     function setupGame() {
-      const num = parseInt(document.getElementById('numPlayers').value);
-      if (!num || num < 2) return alert("Enter 2 or more players.");
+      const numPlayers = parseInt(document.getElementById('numPlayers').value);
+      if (numPlayers < 2 || numPlayers > 10) {
+        alert("Please enter between 2 and 10 players");
+        return;
+      }
 
       const container = document.getElementById("playerInputs");
       container.innerHTML = "";
-      players = [];
-      for (let i = 0; i < num; i++) {
+      
+      for (let i = 0; i < numPlayers; i++) {
         const input = document.createElement("input");
         input.type = "text";
-        input.placeholder = `Player ${i + 1} name`;
+        input.placeholder = `Player ${i+1} Name`;
         input.id = `player${i}`;
         container.appendChild(input);
         container.appendChild(document.createElement("br"));
       }
 
-      const button = document.createElement("button");
-      button.className = "button";
-      button.innerText = "Begin Game";
-      button.onclick = beginGame;
-      container.appendChild(button);
+      const startButton = document.createElement("button");
+      startButton.className = "start-button";
+      startButton.textContent = "Begin Game";
+      startButton.onclick = beginGame;
+      container.appendChild(startButton);
     }
 
     function beginGame() {
       players = [];
       scores = {};
-      eliminatedPlayers = [];
+      
       for (let i = 0; i < 10; i++) {
         const input = document.getElementById(`player${i}`);
         if (input && input.value.trim()) {
@@ -237,163 +248,118 @@
           scores[input.value.trim()] = 0;
         }
       }
-      if (players.length < 2) return alert("Enter at least two player names.");
+      
+      if (players.length < 2) {
+        alert("Please enter at least 2 player names");
+        return;
+      }
 
       document.getElementById("setup").style.display = "none";
       document.getElementById("game").style.display = "block";
-      document.getElementById("winScreen").style.display = "none";
-      currentIndex = 0;
+      currentPlayerIndex = 0;
       roundScore = 0;
-      renderGame();
+      updateGameDisplay();
     }
 
-    function renderGame() {
-      const current = players[currentIndex];
-      document.getElementById("turnDisplay").innerText = `${current}'s Turn`;
-      document.getElementById("roundScore").innerText = `Round Score: ${roundScore}`;
-
-      const buttons = document.getElementById("buttons");
-      buttons.innerHTML = "";
-      outcomes.forEach(outcome => {
-        const btn = document.createElement("button");
-        btn.className = "button";
-        btn.innerText = outcome.name;
-        btn.onclick = () => {
-          roundScore += outcome.points;
-          renderGame();
-        };
-        buttons.appendChild(btn);
-      });
-
-      const board = document.getElementById("scoreBoard");
-      board.innerHTML = "";
-      players.forEach(p => {
-        const li = document.createElement("li");
-        li.innerText = `${p}: ${scores[p]} pts`;
-        if (eliminatedPlayers.includes(p)) {
-          li.className = "eliminated";
-        }
-        board.appendChild(li);
-      });
-    }
-
-    function eliminatePlayer() {
-      const current = players[currentIndex];
-      eliminatedPlayers.push(current);
-      alert(`${current} has been eliminated by Piggyback!`);
-      
-      // Check if game is over
-      if (players.length - eliminatedPlayers.length === 1) {
-        const winner = players.find(p => !eliminatedPlayers.includes(p));
-        showWinScreen(winner, true);
-        return;
-      }
-      
-      nextPlayer();
+    function addPoints(points) {
+      roundScore += points;
+      updateGameDisplay();
     }
 
     function pigOut() {
-      alert("Pig Out! Round score lost.");
+      roundScore = 0;
       nextPlayer();
     }
 
     function makinBacon() {
-      const current = players[currentIndex];
-      scores[current] = 0;
-      alert(`${current}'s score reset to 0!`);
+      scores[players[currentPlayerIndex]] = 0;
+      roundScore = 0;
+      updateGameDisplay();
       nextPlayer();
     }
 
     function bankPoints() {
-      const current = players[currentIndex];
-      scores[current] += roundScore;
-      if (scores[current] >= 100) {
-        showWinScreen(current, false);
+      scores[players[currentPlayerIndex]] += roundScore;
+      
+      if (scores[players[currentPlayerIndex]] >= 100) {
+        showWinScreen(players[currentPlayerIndex]);
         return;
       }
-      alert(`${roundScore} points banked.`);
+      
+      roundScore = 0;
       nextPlayer();
     }
 
     function nextPlayer() {
+      currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
       roundScore = 0;
-      do {
-        currentIndex = (currentIndex + 1) % players.length;
-      } while (eliminatedPlayers.includes(players[currentIndex]));
-      renderGame();
+      updateGameDisplay();
     }
 
-    function showWinScreen(winner, isEliminationWin) {
+    function updateGameDisplay() {
+      document.getElementById("current-player").textContent = `${players[currentPlayerIndex]}'s Turn`;
+      document.getElementById("round-score").textContent = `Round Score: ${roundScore}`;
+      
+      const scoreDisplay = document.getElementById("score-display");
+      scoreDisplay.innerHTML = "";
+      
+      players.forEach(player => {
+        const scoreElement = document.createElement("div");
+        scoreElement.className = "player-score";
+        scoreElement.textContent = `${player}: ${scores[player]} pts`;
+        scoreDisplay.appendChild(scoreElement);
+      });
+    }
+
+    function showWinScreen(winner) {
       document.getElementById("game").style.display = "none";
-      const winScreen = document.getElementById("winScreen");
-      const winnerText = document.getElementById("winnerText");
+      document.getElementById("win-screen").style.display = "flex";
       
-      if (isEliminationWin) {
-        winnerText.innerText = `${winner} wins as the last remaining player!`;
-      } else {
-        winnerText.innerText = `${winner} wins with ${scores[winner]} points!`;
-      }
+      document.getElementById("winner-message").textContent = `${winner} wins with ${scores[winner]} points!`;
       
-      // Create final rankings
-      const rankings = document.getElementById("finalRankings");
-      rankings.innerHTML = "";
+      const finalScores = document.getElementById("final-scores");
+      finalScores.innerHTML = "";
       
-      // Sort players by score (highest first)
+      // Sort players by score
       const sortedPlayers = [...players].sort((a, b) => scores[b] - scores[a]);
       
       sortedPlayers.forEach((player, index) => {
-        const li = document.createElement("li");
-        li.innerText = `${index + 1}. ${player}: ${scores[player]} pts`;
-        if (eliminatedPlayers.includes(player)) {
-          li.innerText += " (eliminated)";
-        }
-        rankings.appendChild(li);
+        const scoreElement = document.createElement("div");
+        scoreElement.className = "player-score";
+        scoreElement.textContent = `${index + 1}. ${player}: ${scores[player]} pts`;
+        finalScores.appendChild(scoreElement);
       });
       
-      winScreen.style.display = "block";
-      startConfetti();
+      createConfetti();
     }
 
     function resetGame() {
-      stopConfetti();
-      document.getElementById("winScreen").style.display = "none";
+      document.getElementById("win-screen").style.display = "none";
       document.getElementById("setup").style.display = "block";
+      clearConfetti();
     }
 
-    // Confetti animation functions
-    let confettiInterval;
-    function startConfetti() {
-      const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
-      confettiInterval = setInterval(() => {
+    function createConfetti() {
+      const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+      
+      for (let i = 0; i < 100; i++) {
         const confetti = document.createElement("div");
         confetti.className = "confetti";
-        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.left = Math.random() * 100 + 'vw';
         confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+        confetti.style.width = Math.random() * 10 + 5 + 'px';
+        confetti.style.height = Math.random() * 10 + 5 + 'px';
+        confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
         document.body.appendChild(confetti);
         
-        // Animation
-        let pos = -10;
-        let speed = 2 + Math.random() * 3;
-        let spin = Math.random() * 10 - 5;
-        let angle = 0;
-        
-        const fall = setInterval(() => {
-          pos += speed;
-          angle += spin;
-          confetti.style.top = pos + "px";
-          confetti.style.transform = `rotate(${angle}deg)`;
-          
-          if (pos > window.innerHeight) {
-            clearInterval(fall);
-            confetti.remove();
-          }
-        }, 20);
-      }, 100);
+        // Remove confetti after animation
+        setTimeout(() => {
+          confetti.remove();
+        }, 5000);
+      }
     }
 
-    function stopConfetti() {
-      clearInterval(confettiInterval);
+    function clearConfetti() {
       document.querySelectorAll('.confetti').forEach(el => el.remove());
     }
   </script>
