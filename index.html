@@ -107,6 +107,9 @@
       gap: 10px;
       margin-bottom: 20px;
     }
+    .special-buttons {
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -122,9 +125,12 @@
     <h2 id="turnDisplay"></h2>
     <p id="roundScore">Round Score: 0</p>
     <div id="buttons"></div>
-    <button class="button special" onclick="pigOut()">Pig Out</button>
-    <button class="button special" onclick="makinBacon()">Makin' Bacon</button>
-    <button class="button special" onclick="bankPoints()">Bank Points</button>
+    <div class="special-buttons">
+      <button class="button special" onclick="pigOut()">Pig Out</button>
+      <button class="button special" onclick="makinBacon()">Makin' Bacon</button>
+      <button class="button special" onclick="eliminatePlayer()">Piggyback</button>
+      <button class="button special" onclick="bankPoints()">Bank Points</button>
+    </div>
     <hr>
     <h3>Scores</h3>
     <ul id="scoreBoard"></ul>
@@ -146,8 +152,7 @@
       { name: "Double Trotter (20 pts)", points: 20 },
       { name: "Double Razorback (20 pts)", points: 20 },
       { name: "Double Snouter (40 pts)", points: 40 },
-      { name: "Double Leaning Jowler (60 pts)", points: 60 },
-      { name: "Piggyback (ELIMINATED)", points: 0, eliminate: true }
+      { name: "Double Leaning Jowler (60 pts)", points: 60 }
     ];
 
     function setupGame() {
@@ -205,12 +210,8 @@
         btn.className = "button";
         btn.innerText = outcome.name;
         btn.onclick = () => {
-          if (outcome.eliminate) {
-            eliminatePlayer();
-          } else {
-            roundScore += outcome.points;
-            renderGame();
-          }
+          roundScore += outcome.points;
+          renderGame();
         };
         buttons.appendChild(btn);
       });
